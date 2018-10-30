@@ -1,0 +1,91 @@
+#%RAML 1.0
+version: v1
+baseUri: https://mocksvc.mulesoft.com/mocks/5390a6f1-f28c-437e-80ce-5364e87e42c3 # 
+title: candidatesmgmt
+
+types:
+  Users: !include datatypes/UsersDataType.raml
+  UsersNoID: !include datatypes/UsersNoIdDataType.raml
+
+/users:
+  get:
+    responses: 
+      200:
+        body: 
+          application/json:
+            type: Users[]
+            example: !include Examples/UsersExample.raml
+      400:
+        body: 
+          application/json:
+            example: {
+              "message": "Error retriving the data."
+            }
+        
+  post:
+    body: 
+      application/json:
+        type: UsersNoID
+        example: !include Examples/UsersNoIDExample.raml
+    responses: 
+      200:
+        body: 
+          application/json:
+            example: {
+              "message": "The user successfully created."
+            }
+      400:
+        body: 
+          application/json:
+            example: {
+              "message": "Error creating the user."
+            }
+
+          
+  /{id}:
+    get:
+      responses: 
+        200:
+          body: 
+            application/json:
+              type: Users
+              example: !include Examples/UserExample.raml
+        400:
+          body: 
+            application/json:
+              example: {
+                "message": "unable to find the user, please check the ID."
+              }
+    put:
+      body: 
+        application/json:
+          type: Users
+          example: !include Examples/UserExample.raml
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: {
+                "message": "user successfully updated."
+              }
+        400:
+          body: 
+            application/json:
+              example: {
+                "message": "Error,unable to modifiy the user."
+              }
+    delete:
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: {
+                "message": "user is deleted successfuly."
+              }
+        400:
+          body: 
+            application/json:
+              example: {
+                "message": "unable to delete the user,please check the ID and try again."
+              }
+          

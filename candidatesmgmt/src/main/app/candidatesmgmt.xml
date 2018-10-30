@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    <http:listener-config name="candidatesmgmt-httpListenerConfig" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="candidatesmgmt-config" raml="candidatesmgmt.raml" consoleEnabled="false" doc:name="Router"/>
+    <flow name="candidatesmgmt-main">
+        <http:listener config-ref="candidatesmgmt-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="candidatesmgmt-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="candidatesmgmt-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="candidatesmgmt-console">
+        <http:listener config-ref="candidatesmgmt-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="candidatesmgmt-config" doc:name="APIkit Console"/>
+    </flow>
+    <flow name="put:/users/{id}:application/json:candidatesmgmt-config">
+        <set-payload value="{&#xA;&quot;message&quot; : &quot;user successfully updated.&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="delete:/users/{id}:candidatesmgmt-config">
+        <set-payload value="{&#xA;&quot;message&quot; : &quot;user is deleted successfuly.&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/users:candidatesmgmt-config">
+        <set-payload value="[&#xA;{&#xA;&quot;id&quot; : 43,&#xA;&quot;first&quot; : &quot;Terry&quot;,&#xA;&quot;last&quot; : &quot;Berry&quot;,&#xA;&quot;department&quot; : &quot;COSC&quot;&#xA;},&#xA;{&#xA;&quot;id&quot; : 44,&#xA;&quot;first&quot; : &quot;Berry&quot;,&#xA;&quot;last&quot; : &quot;Jack&quot;,&#xA;&quot;department&quot; : &quot;Mule&quot;&quot;&#xA;}&#xA;]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/users/{id}:candidatesmgmt-config">
+        <set-payload value="{&#xA;&quot;id&quot; : 43,&#xA;&quot;first&quot; : &quot;Terry&quot;,&#xA;&quot;last&quot; : &quot;Berry&quot;,&#xA;&quot;department&quot; : &quot;COSC&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/users:application/json:candidatesmgmt-config">
+        <set-payload value="{&#xA;&quot;message&quot; : &quot;The user successfully created.&quot;&#xA;}" doc:name="Set Payload"/>
+    </flow>
+    <apikit:mapping-exception-strategy name="candidatesmgmt-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>

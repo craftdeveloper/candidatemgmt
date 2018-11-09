@@ -9,3 +9,8 @@ Shared resources allow multiple development teams to work in parallel using the 
 •	Ensure consistency between applications upon any changes, as the configuration is only set in one place.
 
 To practice a Mule Domain Project use: https://dzone.com/articles/mule-shared-resources-and-mule-domain-project
+									   https://docs.mulesoft.com/mule-runtime/4.1/shared-resources#deploying-with-shared-resources
+									   
+									   
+									   
+									   

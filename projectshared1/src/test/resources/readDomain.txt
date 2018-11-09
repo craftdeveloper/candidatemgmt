@@ -1,0 +1,11 @@
+
+A Mule Domain project is used to configure shared resources so these shared resources can be accessed from different Mule projects associated with this domain project. Once we create and deploy a domain project, a domain is created with the project name, so you can configure this domain in your application either by using mule-deploy.properties file or by using mule-project.xml so that all the resources configured in it can be accessed.
+What Are Shared Resources?
+Mule supports the ability to define selected connectors as common resources and expose them to all applications deployed under the same domain. These resources are known as shared resources; to host these, you must create a Mule Domain Project and then reference it on each of the projects that are meant to use the elements in it. Once defined, any Mule application associated with a particular domain can access resources in this file. Note that Mule applications can be associated with only one domain at a time.
+Shared resources allow multiple development teams to work in parallel using the same set of reusable connectors. Defining these connectors as shared resources at the domain level allows the team to:
+•	Expose multiple services within the domain through the same port,
+•	Share the connection to persistent storage,
+•	Share services between applications through a well-defined interface,
+•	Ensure consistency between applications upon any changes, as the configuration is only set in one place.
+
+To practice a Mule Domain Project use: https://dzone.com/articles/mule-shared-resources-and-mule-domain-project

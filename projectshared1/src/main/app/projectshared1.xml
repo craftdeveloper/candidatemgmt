@@ -9,5 +9,5 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
     <flow name="projectshared1Flow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
         <logger message="#[message]" level="INFO" doc:name="Logger"/>
-    </flow>
+    </flow>   
 </mule>
